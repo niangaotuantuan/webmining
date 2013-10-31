@@ -28,20 +28,31 @@ def train(labeled_featuresets, estimator=nltk.ELEProbDist):
     return NaiveBayesClassifier(label_probdist, feature_probdist)
 
 
+def read_samples(dir):
+    samples = []
+    with open(dir, 'r') as csvfile:
+    	spamreader = csv.reader(csvfile, delimiter=',')
+    	next(spamreader, None) # skip the header
+    	for row in spamreader:
+    		tokenizer = nltk.tokenize.RegexpTokenizer(r'\w{3,}')
+    		words_filtered = [w.lower() for w in tokenizer.tokenize(row[1])]
+            # mock dimension: positive - negative. Used in proof of concept
+    		samples.append((words_filtered, (float(row[7]) - float(row[5]) > 0)))
 
-tweets = []
-with open('../data/train_lite.csv', 'r') as csvfile:
-	spamreader = csv.reader(csvfile, delimiter=',')
-	next(spamreader, None)
-	for row in spamreader:
-		tokenizer = nltk.tokenize.RegexpTokenizer(r'\w{3,}')
-		words_filtered = [w.lower() for w in tokenizer.tokenize(row[1])]
-		tweets.append((words_filtered, (float(row[7]) - float(row[5]) > 0)))
+    return samples
+
+def evaluate(classifier, labelled_test_set):
+    tz = zip(labelled_test_set)
+    rst = [(classifier.classify(extract_features(p)), g) for p,g in zip(tz[0], tz[1])]    
+    print rst
+    return rst
+
+test_set = read_samples('../data/test_labelled')
+train_set = read_samples('../data/train_lite.csv')
 
 word_features = get_word_features(get_words_in_tweets(tweets))
 training_set = nltk.classify.apply_features(extract_features, tweets)
 classifier = nltk.NaiveBayesClassifier.train(training_set)
 
 # evaluate
-tz = zip(*tweets)
-[(classifier.classify(extract_features(p)), g) for p,g in zip(tz[0], tz[1])]
+evaluate(classifier, test_set)
