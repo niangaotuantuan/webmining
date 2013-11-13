@@ -64,6 +64,20 @@ def read_tweets(dir):
 
     return tweets
 
+def read_labels(dir):
+    """
+    Reads the file and returns raw labels
+    """
+    labels = []
+    with open(dir, 'r') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',')
+        next(spamreader, None) # skip the header
+        for row in spamreader:
+            labels.append(row[4:27])
+
+    return labels
+
+
 def evaluate(classifier, labelled_test_set):
     tz = zip(*labelled_test_set)
     rst = [(classifier.classify(extract_features(p)), g) for p,g in zip(tz[0], tz[1])]    
