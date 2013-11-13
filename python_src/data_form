@@ -1,0 +1,20 @@
+`tweets`
+----------
+	[
+		'jazz rainy, afternoon',
+		...
+	]
+
+`train_set`
+---------
+	[
+		...
+		(['jazz', 'rainy', 'afternoon', 'link'], False)
+		...
+		...
+	]
+
+`word_features`
+---------------
+	[..., 'weathre', 'year', 'yess', ...]
+
