@@ -1,0 +1,27 @@
+#######################################################
+#
+# sklearn SVD example
+#
+# adapted from http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.NMF.html
+# and http://scikit-learn.org/stable/modules/generated/sklearn.decomposition.TruncatedSVD.html
+# 
+
+data = [[],[]]
+
+from sklearn.decomposition import TruncatedSVD
+import matplotlib.pyplot as plt
+
+model = TruncatedSVD(n_components=50)
+# reduce dimentionality
+red = model.fit_transform(data)
+# reconstruct
+rec = model.inverse_transform(red)
+
+plt.subplot(131)
+plt.imshow(data)
+plt.subplot(132)
+plt.imshow(rec)
+plt.subplot(133)
+plt.imshow(np.abs(data-rec))
+
+plt.show()

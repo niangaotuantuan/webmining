@@ -1,11 +1,13 @@
+from sklearn.decomposition import TruncatedSVD
 from sklearn.svm import LinearSVC
 from nltk.classify.scikitlearn import SklearnClassifier
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
-
+import numpy as np
 from sklearn.svm import SVR
+import matplotlib.pyplot as plt
 
 execfile('scratch.py')
 
@@ -16,7 +18,7 @@ def tokenizer(text):
 
 
 # Read files
-input_filename = '../data/train_lite.csv'
+input_filename = '../data/train_lite_1000.csv'
 tweets = read_tweets(input_filename)
 labels = read_labels(input_filename)
 # Get feature vectors by tf-idf
