@@ -73,7 +73,7 @@ def read_labels(dir):
         spamreader = csv.reader(csvfile, delimiter=',')
         next(spamreader, None) # skip the header
         for row in spamreader:
-            labels.append(row[4:27])
+            labels.append(row[4:28])
 
     return labels
 
