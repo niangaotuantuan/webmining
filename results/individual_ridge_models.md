@@ -14,12 +14,16 @@ Labels
 ======
 Raw labels, treated as individual
 
+Data set
+========
+1000 lite version
+
 Performance
 ===========
 Time
 ----
 ~1s
-Error
+Accuracy
 -----
        s1,I can't tell  s2,Negative  \
 count       148.000000   148.000000   
