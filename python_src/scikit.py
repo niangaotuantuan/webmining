@@ -5,11 +5,12 @@ from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVR
+from sklearn.linear_model import Ridge
 import numpy as np
-import pandas
+from pandas import Series
 import matplotlib.pyplot as plt
 
-execfile('scratch.py')
+from scratch import *
 
 def tokenizer(text):
 	tok = nltk.tokenize.RegexpTokenizer(r'\w{3,}')
@@ -32,13 +33,32 @@ def read_dataset(input_filename):
 
 # Train model
 def train_model(train_data, train_labels, algo):
+	"""
+	Train the model
+	"""
 	if algo == 'svr_rbf':
 		"""
-		SVM regression
+		SVM regression, RBF kernel
 		"""
 		svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
 		svr_rbf.fit(train_data, train_labels)
 		return svr_rbf
+
+	if algo == 'svr_lin':
+		"""
+		SVM regression, linear
+		"""
+		svr_lin = SVR(kernel='linear')
+		svr_lin.fit(train_data, train_labels)
+		return svr_lin
+
+	if algo == 'ridge':
+		"""
+		Ridge regression
+		"""
+		clf = Ridge(alpha = 0.5)
+		clf.fit(train_data, train_labels)
+		return clf
 
 	# No hit algorithm
 	print "unimplemented model type"
@@ -57,14 +77,19 @@ def evaluate_result(pred, test_labels):
 	nlabels = np.float32(np.array(test_labels))
 
 	s = Series(np.abs(nlabels - npred))
-	s.describe()
+	print s.describe()
+	print 
 
 	return s
 
 # Main routine
-def routine():
+def routine(algo):
+	# Calculate time
+	import time
+	start_time = time.time()
+
 	# Prepare data
-	data, labels = read_dataset('../data/train_lite_1000.csv')
+	data, labels = read_dataset('../data/train.csv')
 	labels = zip(*labels)[0]
 	# Seperate the test and train
 	fold = int(len(data) * 0.9)
@@ -74,12 +99,15 @@ def routine():
 	test_labels = labels[fold+1:]
 	
 	# Train model
-	model = train_model(train_data, train_labels, 'svr_rbf')
+	model = train_model(train_data, train_labels, algo)
 
 	# Get predict result
 	result = get_prediction(model, test_data)
 
 	# Evaluate result
-	evaluate_result(result, test_labels)
+	error_series = evaluate_result(result, test_labels)
 
-	pass
+	# Calculate time
+	print 'Execution time: ', time.time() - start_time, 'seconds.'
+
+	return error_series
