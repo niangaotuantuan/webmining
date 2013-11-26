@@ -26,9 +26,12 @@ train_label <- train_raw[,5:28] #sentiment, when, weather
 #train <- Corpus(x=train_tweet, readerControl=list(language="eng"))
 train <- Corpus(VectorSource(train_tweet))
 
-label_senti <- train_label[,1:5] #sentiment
-label_when <- train_label[,6:9] #when
-label_weather <- train_label[,10:24] #weather
+label_s <- train_label[,1:5] #sentiment
+label_w <- train_label[,6:9] #when
+label_k <- train_label[,10:24] #weather
+
+label_s[,3] <- as.numeric(label_s[,3])
+
 
 ## Here needs to convert binary-classification to multi-classification
 #senti <- label_senti

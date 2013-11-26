@@ -19,7 +19,7 @@ dtm2 <- DocumentTermMatrix(train,  #dtm2 with weightTfIdf
                                                      FALSE),
                                          stopwords = TRUE,
 										 removePunctuation = TRUE))
-dtm2 <- DocumentTermMatrix(train,  #dtm3 with weightTfIdf and normalized
+dtm3 <- DocumentTermMatrix(train,  #dtm3 with weightTfIdf and normalized
                           control = list(weighting =
                                          function(x)
                                          weightTfIdf(x, normalize =

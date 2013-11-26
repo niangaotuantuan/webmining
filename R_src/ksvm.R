@@ -1,7 +1,7 @@
 library(kernlab)
 
 # train the SVM
-svm1 <- ksvm(train,label_senti,type="C-svc",kernel=sk,C=100,scaled=c())
+svm1 <- ksvm(train,label_s,type="C-svc",kernel=sk,C=100,scaled=c())
 # General summary
 svm1
 # Attributes that you can access
