@@ -25,10 +25,13 @@ train_label <- train_raw[,5:28] #sentiment, when, weather
 label_mat <- train_label
 
 #train <- Corpus(x=train_tweet, readerControl=list(language="eng"))
-corpus <- Corpus(VectorSource(train_tweet))
+#corpus <- Corpus(VectorSource(train_tweet))
+train_tweet <- as.matrix(train_tweet)
+corpus <- Corpus(VectorSource(train_tweet[1:500]))
 
 label_s <- train_label[,1:5] #sentiment
 label_w <- train_label[,6:9] #when
+label_sw <- train_label[,1:9]
 label_k <- train_label[,10:24] #weather
 
 label_s[,3] <- as.numeric(label_s[,3])

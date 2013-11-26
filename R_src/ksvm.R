@@ -1,7 +1,9 @@
 library(kernlab)
 
 # train the SVM
-svm1 <- ksvm(label_mat~.,data=dtm,type="C-svc",kernel=sk,C=100,scaled=c())
+train.dtm <- as.matrix(corpus.dtm)
+svm.s <- ksvm(y=label_s[1:500,],x=train.dtm,type="eps-svr",kernel=stringdot)#epslon regression
+svm.w <- ksvm(label_w~.,x=train.dtm,type="probabilities",kernel=stringdot)
 # General summary
 svm1
 # Attributes that you can access

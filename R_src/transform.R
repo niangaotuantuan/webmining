@@ -2,17 +2,26 @@
 #--------------Transformations---------------#
 #fixing up the data nice and good like
 
-corpus <- tm_map(corpus,stripWhitespace) #strip white space
-corpus <- tm_map(corpus, tolower)
+#extract hashtag
+library("stringr")
+tag <- str_extract(corpus,"^#.+?#")  #以“#”开头，“."表示任意字符，"+"表示前面的字符至少出现一次，"?"表示不采用贪婪匹配—即之后遇到第一个#就结束
+tag <- na.omit(tag)  #去除NA
+tag <- unique(tag)  
+#insertWords(tag)
 
-#Remove Stopwords
-#train <- tm_map(train, removeWords,stopwords("english"))
-#tm_map(train,stemDocument) #The stemmer native to tm is the stemDocument function, and you can call it with
+#corpus <- tm_map(corpus,stripWhitespace) #strip white space
+#corpus <- tm_map(corpus, tolower)
+skipWords <- function(x) removeWords(x, stopwords("english"))
+funcs <- list(tolower, removePunctuation, removeNumbers, stripWhitespace, skipWords)
+corpus <- tm_map(corpus, FUN = tm_reduce, tmFuns = funcs)
+
+corpus.dtm <- DocumentTermMatrix(corpus, control = list(wordLengths = c(3,10)))
+inspect(corpus.dtm[1:5,1:5])
 
 #Create Document Term Matrix
 dtm <- DocumentTermMatrix(corpus,
 control = list(
-            stemming=TRUE,
+            stemming=TRUE,#for special task, when, it should not be TRUE
             stopwords=TRUE,
             minWordLength=3,
             removeNumbers=TRUE,
@@ -27,12 +36,19 @@ dtm_matrix_clean(dtm)
 inspect(dtm)
 
 removeSparseTerms(dtm, 0.8)
+freq50 <- findFreqTerms(dtm, 50) #View terms that appear atleast 50 times
+findAssocs(dtm,"sunny",0.8) #what words show up in correlation with the term "sunny". It appears many negative terms
 
-tfidf <- tapply(dtm$v/row_sums(dtm)[dtm$i],
-   dtm$j, mean)* log2(nDocs(dtm)/col_sums(dtm > 0))
-   
-dtm <- dtm[, tfidf > 0.1]
-dtm <- dtm[row_sums(dtm) > 0, ]
+
+
+temp <- inspect(dtm)
+FreqMat <- data.frame(apply(temp, 1, sum))
+FreqMat <- data.frame(ST = row.names(FreqMat), Freq = FreqMat[, 1])
+FreqMat <- FreqMat[order(FreqMat$Freq, decreasing = T), ]
+row.names(FreqMat) <- NULL
+View(FreqMat)
+
+
 
 #as.numeric(as.matrix(dtm)))
 
@@ -53,13 +69,7 @@ dtm <- dtm[row_sums(dtm) > 0, ]
 #                                                     TRUE),
 #                                         stopwords = TRUE,
 #										 removePunctuation = TRUE))
-inspect(dtm[1:4,1:20])#Doc-1:4,#Terms-1:129909
 
-
-
-#removeSparseTerms(dtm, 0.8)
-#removeSparseTerms(dtm2, 0.8)
-#removeSparseTerms(dtm3, 0.8)
 
 
 

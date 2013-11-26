@@ -5,17 +5,21 @@ set.seed(42) #From random.org
  
 #Libraries
 library(caret)
-library(devtools)
-install_github('caretEnsemble', 'zachmayer') #Install zach's caretEnsemble package
+#library(devtools)
+#install_github('caretEnsemble', 'zachmayer') #Install zach's caretEnsemble package
 library(caretEnsemble)
- 
+library(randomForest)
+
 #Data
-library(mlbench)
-data(BostonHousing2)
-X <- model.matrix(cmedv~crim+zn+indus+chas+nox+rm+age+dis+
-                    rad+tax+ptratio+b+lstat+lat+lon, BostonHousing2)[,-1]
+#library(mlbench)
+#data(BostonHousing2)
+#X <- model.matrix(cmedv~crim+zn+indus+chas+nox+rm+age+dis+
+#                    rad+tax+ptratio+b+lstat+lat+lon, BostonHousing2)[,-1]
+#X <- data.frame(X)
+X <- as.matrix(corpus.dtm)
 X <- data.frame(X)
-Y <- BostonHousing2$cmedv
+Y <- label_sw[1:500,1]
+#Y <- BostonHousing2$cmedv
  
 #Split train/test
 train <- runif(nrow(X)) <= .66
