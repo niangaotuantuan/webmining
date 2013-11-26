@@ -20,11 +20,12 @@ setwd(dir)
 train_raw <- read.table("train.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
 head(train_raw)
 
-train_tweet <- train_raw[,1:4] #id, tweet, state, location
+train_tweet <- train_raw[,2] #id, tweet, state, location
 train_label <- train_raw[,5:28] #sentiment, when, weather
+label_mat <- train_label
 
 #train <- Corpus(x=train_tweet, readerControl=list(language="eng"))
-train <- Corpus(VectorSource(train_tweet))
+corpus <- Corpus(VectorSource(train_tweet))
 
 label_s <- train_label[,1:5] #sentiment
 label_w <- train_label[,6:9] #when
