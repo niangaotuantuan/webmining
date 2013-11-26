@@ -26,7 +26,11 @@ dtm3 <- DocumentTermMatrix(train,  #dtm3 with weightTfIdf and normalized
                                                      TRUE),
                                          stopwords = TRUE,
 										 removePunctuation = TRUE))
-inspect(dtm[1:10,1:10])
+inspect(dtm[1:4,1:20])#Doc-1:4,#Terms-1:129909
+
+removeSparseTerms(dtm, 0.8)
+removeSparseTerms(dtm2, 0.8)
+removeSparseTerms(dtm3, 0.8)
 
 findFreqTerms(dtm, 50) #View terms that appear atleast 50 times
 findAssocs(dtm,"sunny",0.8) #what words show up in correlation with the term "sunny". It appears many negative terms
