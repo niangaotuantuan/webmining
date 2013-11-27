@@ -36,6 +36,9 @@ label_k <- train_label[,10:24] #weather
 
 label_s[,3] <- as.numeric(label_s[,3])
 
+data <- train_raw[,-1]
+data <- data[,-2]
+data <- data[,-2]
 
 ## Here needs to convert binary-classification to multi-classification
 #senti <- label_senti
