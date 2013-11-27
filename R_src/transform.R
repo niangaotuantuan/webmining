@@ -12,8 +12,10 @@ tag <- unique(tag)
 #corpus <- tm_map(corpus,stripWhitespace) #strip white space
 #corpus <- tm_map(corpus, tolower)
 skipWords <- function(x) removeWords(x, stopwords("english"))
-funcs <- list(tolower, removePunctuation, removeNumbers, stripWhitespace, skipWords)
+#funcs <- list(tolower, removePunctuation, removeNumbers, stripWhitespace, skipWords)
+funcs <- list(tolower, removePunctuation, removeNumbers, skipWords)
 corpus <- tm_map(corpus, FUN = tm_reduce, tmFuns = funcs)
+corpus.test <- tm_map(corpus.test, FUN = tm_reduce, tmFuns = funcs)
 
 corpus.dtm <- DocumentTermMatrix(corpus, control = list(wordLengths = c(3,10)))
 inspect(corpus.dtm[1:5,1:5])
@@ -77,3 +79,17 @@ findFreqTerms(dtm, 50) #View terms that appear atleast 50 times
 findAssocs(dtm,"sunny",0.8) #what words show up in correlation with the term "sunny". It appears many negative terms
 
 #dtm_mat <- DocumentTermMatrix(makeChunks(rs,500),list(weighting=weightBin)) 
+
+corpus.Freq <- data.frame(table(corpus))
+corpus.Freq$corpus  <- as.character(corpus.Freq$corpus)
+corpus.Freq <- corpus.Freq[order(-corpus.Freq$Freq), ]
+rownames(corpus.Freq) <- 1:nrow(corpus.Freq)
+key.terms <- corpus.Freq[corpus.Freq$Freq>2, 'corpus'] #key words to match on test
+
+corpust.Freq <- data.frame(table(corpus.test))
+corpust.Freq$corpus.test  <- as.character(corpust.Freq$corpus.test)
+corpust.Freq <- corpust.Freq[order(-corpust.Freq$Freq), ]
+rownames(corpust.Freq) <- 1:nrow(corpust.Freq)
+
+#Match key words to the words in test corpus
+corpust.Freq[corpust.Freq$corpus.test %in%key.terms, ]

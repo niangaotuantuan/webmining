@@ -20,6 +20,16 @@ setwd(dir)
 train_raw <- read.table("train.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
 head(train_raw)
 
+dir <- "E:\\"
+setwd(dir)
+test_raw <- read.table("test.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE, fill = TRUE)
+head(test_raw)
+test_tweet <- test_raw[,2]
+corpus.test <- Corpus(VectorSource(test_tweet))
+
+dir <- "E:\\Github\\webmining\\data"
+setwd(dir)
+
 train_tweet <- train_raw[,2] #id, tweet, state, location
 train_label <- train_raw[,5:28] #sentiment, when, weather
 label_mat <- train_label
