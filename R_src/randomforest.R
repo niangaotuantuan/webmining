@@ -9,15 +9,21 @@ library(caret)
 #install_github('caretEnsemble', 'zachmayer') #Install zach's caretEnsemble package
 library(caretEnsemble)
 library(randomForest)
-
+library(gbm)
+library(mboost)
+library(RSNNS)
 #Data
 #library(mlbench)
 #data(BostonHousing2)
 #X <- model.matrix(cmedv~crim+zn+indus+chas+nox+rm+age+dis+
 #                    rad+tax+ptratio+b+lstat+lat+lon, BostonHousing2)[,-1]
 #X <- data.frame(X)
-X <- as.matrix(corpus.dtm)
-X <- data.frame(X)
+
+
+#dtm
+#X <- as.matrix(corpus.dtm)
+#X <- data.frame(X)
+X <- as.matrix(fea_mat[1:500,])
 Y <- label_sw[1:500,1]
 #Y <- BostonHousing2$cmedv
  
