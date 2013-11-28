@@ -27,6 +27,8 @@ label_k <- train_label[,10:24] #weather
 
 label_s[,3] <- as.numeric(label_s[,3])
 label_sw[,3] <- as.numeric(label_sw[,3])
+label_sw[45452,3] <- 0
+label_s[45452,3] <- 0
 
 data <- train_raw[,-1]
 data <- data[,-2]
