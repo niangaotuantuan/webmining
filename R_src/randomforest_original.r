@@ -4,18 +4,32 @@ set.seed(42) #From random.org
 #predictions <- NULL
 NT <- 1000
 
-X <- tense_mat
-Y <- label_w
+X <- traintfidf_mat
+Y <- label_sw
 DATA <- cbind(X,Y)
-formula.cf <- as.formula(w1+w2+w3+w4~.)
+formula.cf <- as.formula(s1+s2+s3+s4+s5+w1+w2+w3+w4~.)
 train <- runif(nrow(X)) <= .22
 
 model.cforest <- cforest(formula.cf, data=DATA[train,], 
-                           control=cforest_unbiased(ntree=NT, trace=F))
+                           control=cforest_unbiased(ntree=NT, trace=F, mtry=2))
+		
+
+X <- tfidf_mat
+Y <- label_s
+DATA2 <- cbind(X,Y)
+formula2.cf <- as.formula(s1+s2+s3+s4+s5~.)
+train <- runif(nrow(X)) <= .22
+
+model2.cforest <- cforest(formula2.cf, data=DATA2[train,], 
+                           control=cforest_unbiased(ntree=NT, trace=F, mtry=2))		
 						   
-						   
-			  
-predictions$cforest<-predict(model.cforest,clean.test,OOB=T)
+clean.test <- testtfidf_mat			  
+predictions$cforest2 <-predict(model.cforest,clean.test,OOB=T)
+
+
+
+
+
 predictions$cforest[,1][predictions$cforest[,1]<=0.5] <- 0
 predictions$cforest[,1][predictions$cforest[,1]>=0.5] <- 1
 ans1 <- predictions$cforest[,1]

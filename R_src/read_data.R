@@ -1,34 +1,15 @@
 library(tm)
 library(kernlab)
 library(Rstem)
-library(Snowball) 
-
-#ALSO NOTE********
-#Snowball package may have problems installing due to Java Virtual Machine issues. During installation, R froze,
-#I shut R down and was then able to install. May also need to install Rstem, which is located on http://www.omegahat.org/
-#go to packages > select repositories>omegahat, and then you should be able to install from there
-#In recent versions R, can use following options to install Rstem:
-#options(CRAN = c(getOption("CRAN"), "http://www.omegahat.org/R"))
-#install.packages("Rstem")
 
 #Set Directory where Text is located
-dir <- "E:\\Github\\webmining\\data"
+dir <- "C:\\Users\\v-yanrl\\Documents\\GitHub\\webmining\\data"
 setwd(dir)
 
 #--------------tm package-------------------#
 
 train_raw <- read.table("train.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE)
 head(train_raw)
-
-dir <- "E:\\"
-setwd(dir)
-test_raw <- read.table("test.csv", header = TRUE, sep = ",", stringsAsFactors = FALSE, fill = TRUE)
-head(test_raw)
-test_tweet <- test_raw[,2]
-corpus.test <- Corpus(VectorSource(test_tweet))
-
-dir <- "E:\\Github\\webmining\\data"
-setwd(dir)
 
 train_tweet <- train_raw[,2] #id, tweet, state, location
 train_label <- train_raw[,5:28] #sentiment, when, weather
@@ -45,6 +26,7 @@ label_sw <- train_label[,1:9]
 label_k <- train_label[,10:24] #weather
 
 label_s[,3] <- as.numeric(label_s[,3])
+label_sw[,3] <- as.numeric(label_sw[,3])
 
 data <- train_raw[,-1]
 data <- data[,-2]
